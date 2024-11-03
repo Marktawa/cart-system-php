@@ -1,3 +1,8 @@
+<!-- TODO
+ - Add prices multi dimaensional array
+ - Add Cart Total
+ - Add Cart Reset -->
+
 <!-- Remove items from cart -->
 <?php
 session_start();
