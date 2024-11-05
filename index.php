@@ -1,10 +1,46 @@
+<!-- Product List with Price PHP -->
+<?php
+$products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
+?>
+
+<h1>My Store</h1>
+<h2>Products</h2>
+<ul>
+    <?php for ($i = 0; $i < count($products); $i++): ?>
+        <li>
+            <form action='/' method='POST'>
+                <label><?php echo $products[$i][0]."  $".$products[$i][1]; ?>
+                    <button type='submit' name='product'
+                        value='<?php echo $products[$i][0]; ?>'>Add
+                    </button>
+                </label>
+            </form>
+        </li>
+    <?php endfor; ?>
+</ul>
+
+<!-- Product List with Price HTML
+<h1>My Store</h1>
+<h2>Products</h2>
+<ul>
+    <li>
+       Ham $15 
+    </li>
+    <li>
+       Cake $20 
+    </li>
+    <li>
+       Milk $10 
+    </li>
+</ul>
+-->
 <!-- TODO
  - Add prices multi dimaensional array
  - Add Cart Total
  - Add Cart Reset -->
 
-<!-- Remove items from cart -->
-<?php
+<!-- Remove items from cart 
+< ?php
 session_start();
 
 $products = ['Ham', 'Cake', 'Milk'];
@@ -27,35 +63,35 @@ if (isset($_POST['cart'])) {
 <h1>My Store</h1>
 <h2>Products</h2>
 <ul>
-    <?php for ($i = 0; $i < count($products); $i++): ?>
+    < ?php for ($i = 0; $i < count($products); $i++): ?>
         <li>
             <form action='/' method='POST'>
-                <label><?php echo $products[$i]; ?>
+                <label>< ?php echo $products[$i]; ?>
                     <button type='submit' name='product'
-                        value='<?php echo $products[$i]; ?>'>Add
+                        value='< ?php echo $products[$i]; ?>'>Add
                     </button>
                 </label>
             </form>
         </li>
-    <?php endfor; ?>
+    < ?php endfor; ?>
 </ul>
 <h2>Cart</h2>
 <ul>
-    <?php for ($i = 0; $i < count($_SESSION['cart']); $i++): ?>
+    < ?php for ($i = 0; $i < count($_SESSION['cart']); $i++): ?>
         <li>
             <form action='/' method='POST'>
-                <label><?php echo $_SESSION['cart'][$i]; ?>
+                <label>< ?php echo $_SESSION['cart'][$i]; ?>
                     <button type='submit' name='cart'
-                        value='<?php echo $_SESSION['cart'][$i]; ?>'>Pop
+                        value='< ?php echo $_SESSION['cart'][$i]; ?>'>Pop
                     </button>
                 </label>
             </form>
         </li>
-    <?php endfor; ?>
+    < ?php endfor; ?>
 </ul>
 
 <!-- Remobe item from cart test
-<?php
+< ?php
 /*$cart = ['Ham', 'Milk', 'Honey'];
 
 if (isset($_POST['cart'])) {
