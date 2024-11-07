@@ -1,6 +1,65 @@
-<!-- Product List with Price PHP -->
+<!--
+Products if physical should have inventory management.
+Quantity of products in inventory should be known.
+Quantity of prdoucts in inventory should be added to array
+When customer clicks proceed to checkout a function is called that will first check if there are enough products in the inventory to satisfy the order, if not the checkout process is aborted with the message not enough inventory to satisfy order.
+
+This also means that periodically the product list should be updated. If stock is out for a particular product tehn put a text "OTu of Stock" to the client and disable the Add to Cart button.
+
+If there are enough products in inventory, the function then deducts the stock levels using the values from the cart. After deduction, the function displays a Checkout block for the customer to enter their details to complete the order. Customer is given a timeline to complete the order or else the order is cancelled and inventory is updated to add the once removed items
+-->
+
 <?php
+session_start();
+
 $products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
+
+$cart_total = 0;
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+    /*$_SESSION['cart'][0] = [];
+    $_SESSION['cart'][1] = [];*/
+}
+
+//Add Product to Cart
+if (isset($_POST['product'])) {
+    $input = $_POST['product'];
+    $index = array_search($input, array_column($_SESSION['cart'], 0));
+
+    if ($index !== FALSE) {
+        $_SESSION['cart'][$index][2] += 1;
+        $_SESSION['cart'][$index][3] += $_SESSION['cart'][$index][1];
+    }
+
+    else {
+        $temp = array_search($input, array_column($products, 0));
+        $item = [$products[$temp][0], $products[$temp][1], 1, $products[$temp][1]];
+        $_SESSION['cart'][] = $item;
+    }
+
+    //$_SESSION['cart'][] = $products[$index];
+    //print_r($_SESSION['cart']);
+}
+
+if (isset($_POST['cart'])) {
+    $input = $_POST['cart'];
+    $index = array_search($input, array_column($_SESSION['cart'], 0));
+
+    if ($_SESSION['cart'][$index][2] > 1) {
+        $_SESSION['cart'][$index][2] -= 1;
+        $_SESSION['cart'][$index][3] -= $_SESSION['cart'][$index][1];
+    }
+
+    else {
+        array_splice($_SESSION['cart'], $index, 1); 
+    }   
+}
+
+$total = array_column($_SESSION['cart'], 3);
+for ($i = 0; $i < count($total); $i++) {
+    $cart_total += $total[$i];
+}
 ?>
 
 <h1>My Store</h1>
@@ -9,7 +68,7 @@ $products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
     <?php for ($i = 0; $i < count($products); $i++): ?>
         <li>
             <form action='/' method='POST'>
-                <label><?php echo $products[$i][0]."  $".$products[$i][1]; ?>
+                <label><?php echo $products[$i][0].",  $".$products[$i][1]; ?>
                     <button type='submit' name='product'
                         value='<?php echo $products[$i][0]; ?>'>Add
                     </button>
@@ -18,6 +77,114 @@ $products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
         </li>
     <?php endfor; ?>
 </ul>
+
+<h2>Cart</h2>
+<ul>
+    <?php for ($i = 0; $i < count($_SESSION['cart']); $i++): ?>
+        <li>
+            <form action='/' method='POST'>
+                <label><?php echo $_SESSION['cart'][$i][0].", $".$_SESSION['cart'][$i][1]." x ".$_SESSION['cart'][$i][2].", $".$_SESSION['cart'][$i][3]; ?>
+                    <button type='submit' name='cart'
+                        value='<?php echo $_SESSION['cart'][$i][0]; ?>'>Pop
+                    </button>
+                </label>
+            </form>
+        </li>
+    <?php endfor; ?>
+</ul>
+<h3>Cart Total</h3>
+<hr>
+<p><?php echo "$ ".$cart_total; ?></p>
+
+<!-- Product List and Cart with Price PHP and Total 
+< ?php
+session_start();
+
+$products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
+
+$cart_total = 0;
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+    /*$_SESSION['cart'][0] = [];
+    $_SESSION['cart'][1] = [];*/
+}
+
+if (isset($_POST['product'])) {
+    $input = $_POST['product'];
+    $index = array_search($input, array_column($products, 0));
+    $_SESSION['cart'][] = $products[$index];
+    print_r($_SESSION['cart']);
+}
+
+if (isset($_POST['cart'])) {
+    $input = $_POST['cart'];
+    $index = array_search($input, array_column($_SESSION['cart'], 0));
+    array_splice($_SESSION['cart'], $index, 1);    
+}
+
+$total = array_column($_SESSION['cart'], 1);
+for ($i = 0; $i < count($total); $i++) {
+    $cart_total += $total[$i];
+}
+?>
+
+<h1>My Store</h1>
+<h2>Products</h2>
+<ul>
+    < ?php for ($i = 0; $i < count($products); $i++): ?>
+        <li>
+            <form action='/' method='POST'>
+                <label>< ?php echo $products[$i][0]."  $".$products[$i][1]; ?>
+                    <button type='submit' name='product'
+                        value='< ?php echo $products[$i][0]; ?>'>Add
+                    </button>
+                </label>
+            </form>
+        </li>
+    < ?php endfor; ?>
+</ul>
+
+<h2>Cart</h2>
+<ul>
+    < ?php for ($i = 0; $i < count($_SESSION['cart']); $i++): ?>
+        <li>
+            <form action='/' method='POST'>
+                <label>< ?php echo $_SESSION['cart'][$i][0]." $".$_SESSION['cart'][$i][1]; ?>
+                    <button type='submit' name='cart'
+                        value='< ?php echo $_SESSION['cart'][$i][0]; ?>'>Pop
+                    </button>
+                </label>
+            </form>
+        </li>
+    < ?php endfor; ?>
+</ul>
+<h3>Cart Total</h3>
+<hr>
+<p>< ?php echo "$ ".$cart_total; ?></p> -->
+
+
+<!-- Product List with Price PHP 
+< ?php
+$products = [['Ham', 20], ['Cake', 15], ['Milk', 10]];
+?>
+
+<h1>My Store</h1>
+<h2>Products</h2>
+<ul>
+    < ?php for ($i = 0; $i < count($products); $i++): ?>
+        <li>
+            <form action='/' method='POST'>
+                <label>< ?php echo $products[$i][0]."  $".$products[$i][1]; ?>
+                    <button type='submit' name='product'
+                        value='< ?php echo $products[$i][0]; ?>'>Add
+                    </button>
+                </label>
+            </form>
+        </li>
+    < ?php endfor; ?>
+</ul>
+    -->
 
 <!-- Product List with Price HTML
 <h1>My Store</h1>
